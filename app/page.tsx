@@ -33,8 +33,8 @@ export default function Home() {
     },
     {
       id: "custom",
-      title: "Custom Goal",
-      desc: "Achieve any personal milestone with structured chronological phases.",
+      title: "Other Goals",
+      desc: "Master regional cuisines, technical architectures, and specialized personal milestones.",
       icon: Target,
       href: "/custom"
     }

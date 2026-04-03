@@ -6,6 +6,7 @@ export interface Task {
   reason: string;
   simpleExplanation: string;
   completed: boolean;
+  subgoal?: "preparation" | "cooking" | "finishing";
   strips: {
     action: string;
     pre: string[];
@@ -395,7 +396,8 @@ export function generateCustomPlan(data: { detailId: string; durationDays: numbe
           reason: pool[tIdx].reason,
           simpleExplanation: pool[tIdx].desc,
           completed: false,
-          strips: { action: "SCOPE_PROJECT", pre: ["goal_unstructured"], eff: ["pathway_clear"] }
+          subgoal: pool[tIdx].subgoal,
+          strips: pool[tIdx].strips
         }
       ];
     } else if (i < planPhaseDays + execPhaseDays) {
@@ -414,7 +416,8 @@ export function generateCustomPlan(data: { detailId: string; durationDays: numbe
           reason: pool[tIdx].reason,
           simpleExplanation: pool[tIdx].desc,
           completed: false,
-          strips: { action: "EXECUTE_TASKS", pre: ["pathway_clear"], eff: ["milestones_completed"] }
+          subgoal: pool[tIdx].subgoal,
+          strips: pool[tIdx].strips
         }
       ];
 
@@ -426,7 +429,8 @@ export function generateCustomPlan(data: { detailId: string; durationDays: numbe
           reason: "Mastery requires repeated exposure to the core difficulty of the task.",
           simpleExplanation: `Spend extra time perfecting the ${pool[sIdx].title.toLowerCase()} step today.`,
           completed: false,
-          strips: { action: "ITERATE", pre: ["milestones_notched"], eff: ["advanced_skill_notched"] }
+          subgoal: pool[sIdx].subgoal,
+          strips: pool[sIdx].strips
         });
       }
     } else {
@@ -440,7 +444,8 @@ export function generateCustomPlan(data: { detailId: string; durationDays: numbe
           reason: pool[rIdx].reason,
           simpleExplanation: pool[rIdx].desc,
           completed: false,
-          strips: { action: "QUALITY_ASSURANCE", pre: ["milestones_completed"], eff: ["goal_achieved"] }
+          subgoal: pool[rIdx].subgoal,
+          strips: pool[rIdx].strips
         }
       ];
     }

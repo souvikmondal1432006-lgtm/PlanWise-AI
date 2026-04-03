@@ -35,6 +35,17 @@ export default function TaskCard({ task, onToggleComplete }: TaskCardProps) {
           )}
           
           <div className="flex-1">
+            {task.subgoal && (
+              <div className="flex gap-2 mb-4">
+                <span className={`text-[9px] font-black uppercase tracking-[0.2em] px-3 py-1 rounded-md border ${
+                  task.subgoal === 'preparation' ? 'bg-curator-primary/10 text-curator-primary border-curator-primary/20' :
+                  task.subgoal === 'cooking' ? 'bg-amber-500/10 text-amber-500 border-amber-500/20' :
+                  'bg-emerald-500/10 text-emerald-500 border-emerald-500/20'
+                }`}>
+                  {task.subgoal}
+                </span>
+              </div>
+            )}
             <h3 className={`text-2xl md:text-3xl font-bold tracking-tight font-manrope mb-4 transition-all duration-500 ${isCompleted ? 'text-curator-on_surface_variant line-through opacity-60' : 'text-curator-on_surface'}`}>
               {task.actionTitle}
             </h3>
@@ -48,7 +59,7 @@ export default function TaskCard({ task, onToggleComplete }: TaskCardProps) {
                 className={`flex items-center gap-3 px-5 py-2.5 rounded-full font-bold text-xs uppercase tracking-widest transition-all ${showExplanation ? 'bg-curator-on_surface text-curator-bg' : 'bg-curator-surface_container_highest text-curator-on_surface_variant hover:text-curator-on_surface hover:bg-curator-surface_bright'}`}
               >
                 <Sparkles className="w-4 h-4" />
-                {showExplanation ? "Hide Context" : "Simple Translation"}
+                {showExplanation ? "Hide Context" : "Explain Simply"}
               </button>
             </div>
 

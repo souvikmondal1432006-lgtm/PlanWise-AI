@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, ArrowRight, Wand2, ChefHat, Code2, Camera, Trophy, MapPin, Utensils } from "lucide-react";
+import { ArrowLeft, ArrowRight, Wand2, ChefHat, Code2, Camera, Trophy, MapPin, Utensils, Leaf, Beef } from "lucide-react";
 import Link from "next/link";
 import { generateCustomPlan } from "@/lib/planningLogic";
 import { PREDEFINED_HIERARCHY } from "@/lib/predefinedGoals";
@@ -17,6 +17,7 @@ export default function CustomWizard() {
   
   const [selections, setSelections] = useState({
     mainGoalId: "",
+    dietaryType: "" as "vegetarian" | "non-vegetarian" | "",
     subCategoryId: "",
     detailId: "",
     durationDays: "7"
@@ -29,6 +30,12 @@ export default function CustomWizard() {
   const subCategory = useMemo(() => 
     mainGoal?.subCategories.find(s => s.id === selections.subCategoryId),
   [mainGoal, selections.subCategoryId]);
+
+  const filteredDetails = useMemo(() => {
+    if (!subCategory) return [];
+    if (selections.mainGoalId !== 'cooking') return subCategory.details;
+    return subCategory.details.filter(d => d.dietaryType === selections.dietaryType);
+  }, [subCategory, selections.dietaryType, selections.mainGoalId]);
 
   const goNext = () => setStep(s => s + 1);
   const goBack = () => setStep(s => Math.max(0, s - 1));
@@ -59,7 +66,7 @@ export default function CustomWizard() {
               <button
                 key={goal.id}
                 onClick={() => {
-                  setSelections({...selections, mainGoalId: goal.id, subCategoryId: "", detailId: ""});
+                  setSelections({...selections, mainGoalId: goal.id, dietaryType: "", subCategoryId: "", detailId: ""});
                   goNext();
                 }}
                 className={`flex flex-col gap-4 p-6 text-left rounded-2xl transition-all duration-500 border-2 ${
@@ -78,6 +85,45 @@ export default function CustomWizard() {
         </div>
       ),
       isValid: () => !!selections.mainGoalId
+    },
+    {
+      id: "diet",
+      title: "What type of meal are you planning?",
+      show: selections.mainGoalId === 'cooking',
+      render: () => (
+        <div className="flex flex-col md:flex-row gap-6 w-full">
+          {[
+            { id: 'vegetarian', label: 'Vegetarian', icon: Leaf, desc: 'Plant-based, lentils, and dairy.' },
+            { id: 'non-vegetarian', label: 'Non-Vegetarian', icon: Beef, desc: 'Meat, poultry, and regional seafood.' }
+          ].map(opt => {
+            const Icon = opt.icon;
+            const isSelected = selections.dietaryType === opt.id;
+            return (
+              <button
+                key={opt.id}
+                onClick={() => {
+                  setSelections({...selections, dietaryType: opt.id as any, detailId: ""});
+                  goNext();
+                }}
+                className={`flex-1 flex flex-col gap-4 p-8 text-left rounded-2xl transition-all duration-500 border-2 ${
+                  isSelected 
+                    ? 'bg-curator-surface_container_high border-curator-primary shadow-2xl scale-[1.02]' 
+                    : 'bg-curator-surface_container_low border-transparent hover:bg-curator-surface_container_high'
+                }`}
+              >
+                <div className={`p-4 rounded-xl w-fit ${isSelected ? 'bg-curator-primary text-curator-on_primary' : 'bg-curator-surface_container_highest text-curator-primary'}`}>
+                  <Icon className="w-8 h-8" />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold font-manrope text-curator-on_surface">{opt.label}</div>
+                  <div className="text-sm text-curator-on_surface_variant mt-2 leading-relaxed">{opt.desc}</div>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      ),
+      isValid: () => !!selections.dietaryType
     },
     {
       id: "sub",
@@ -117,29 +163,37 @@ export default function CustomWizard() {
       show: !!subCategory && subCategory.details.length > 0,
       render: () => (
         <div className="grid grid-cols-1 gap-4 w-full">
-          {subCategory?.details.map(detail => {
+          {filteredDetails.length > 0 ? filteredDetails.map((detail, idx) => {
             const isSelected = selections.detailId === detail.id;
             return (
               <button
                 key={detail.id}
+                style={{ animationDelay: `${idx * 100}ms` }}
                 onClick={() => {
                   setSelections({...selections, detailId: detail.id});
                   goNext();
                 }}
-                className={`flex flex-col gap-2 p-6 text-left rounded-2xl transition-all duration-500 border-2 ${
+                className={`flex flex-col gap-2 p-6 text-left rounded-2xl transition-all duration-500 border-2 animate-in fade-in slide-in-from-bottom-4 fill-mode-both ${
                   isSelected 
                     ? 'bg-curator-surface_container_high border-curator-primary shadow-xl' 
                     : 'bg-curator-surface_container_low border-transparent hover:bg-curator-surface_container_high'
                 }`}
               >
-                <div className="flex items-center gap-3">
-                   <Utensils className="w-4 h-4 text-curator-primary" />
-                   <div className="text-lg font-bold font-manrope text-curator-on_surface">{detail.title}</div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                     <Utensils className="w-4 h-4 text-curator-primary" />
+                     <div className="text-lg font-bold font-manrope text-curator-on_surface">{detail.title}</div>
+                  </div>
+                  {detail.dietaryType === 'vegetarian' && <Leaf className="w-3 h-3 text-curator-primary opacity-50" />}
                 </div>
                 <div className="text-sm text-curator-on_surface_variant leading-relaxed pl-7">{detail.goal}</div>
               </button>
             );
-          })}
+          }) : (
+            <div className="p-10 text-center bg-curator-surface_container_low rounded-2xl border-2 border-dashed border-curator-outline_variant/20">
+              <p className="text-curator-on_surface_variant font-manrope text-lg italic">No specialties found for this combination.</p>
+            </div>
+          )}
         </div>
       ),
       isValid: () => !!selections.detailId

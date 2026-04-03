@@ -33,8 +33,12 @@ export default function CustomWizard() {
 
   const filteredDetails = useMemo(() => {
     if (!subCategory) return [];
-    if (selections.mainGoalId !== 'cooking') return subCategory.details;
-    return subCategory.details.filter(d => d.dietaryType === selections.dietaryType);
+    let base = subCategory.details;
+    if (selections.mainGoalId === 'cooking') {
+      base = base.filter(d => d.dietaryType === selections.dietaryType);
+    }
+    // Shuffling Logic for High-Density Discovery
+    return [...base].sort(() => 0.5 - Math.random());
   }, [subCategory, selections.dietaryType, selections.mainGoalId]);
 
   const goNext = () => setStep(s => s + 1);
@@ -160,37 +164,39 @@ export default function CustomWizard() {
     {
       id: "detail",
       title: `Choose your signature speciality.`,
-      show: !!subCategory && subCategory.details.length > 0,
+      show: !!subCategory && subCategory.details.length > 1,
       render: () => (
-        <div className="grid grid-cols-1 gap-4 w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
           {filteredDetails.length > 0 ? filteredDetails.map((detail, idx) => {
             const isSelected = selections.detailId === detail.id;
             return (
               <button
                 key={detail.id}
-                style={{ animationDelay: `${idx * 100}ms` }}
+                style={{ animationDelay: `${idx * 150}ms` }}
                 onClick={() => {
                   setSelections({...selections, detailId: detail.id});
                   goNext();
                 }}
-                className={`flex flex-col gap-2 p-6 text-left rounded-2xl transition-all duration-500 border-2 animate-in fade-in slide-in-from-bottom-4 fill-mode-both ${
+                className={`flex flex-col gap-3 p-6 text-left rounded-2xl transition-all duration-500 border-2 animate-in fade-in slide-in-from-bottom-6 fill-mode-both ${
                   isSelected 
-                    ? 'bg-curator-surface_container_high border-curator-primary shadow-xl' 
-                    : 'bg-curator-surface_container_low border-transparent hover:bg-curator-surface_container_high'
+                    ? 'bg-curator-surface_container_high border-curator-primary shadow-xl scale-[1.03]' 
+                    : 'bg-curator-surface_container_low border-transparent hover:bg-curator-surface_container_high hover:border-curator-outline_variant/20'
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                     <Utensils className="w-4 h-4 text-curator-primary" />
-                     <div className="text-lg font-bold font-manrope text-curator-on_surface">{detail.title}</div>
+                  <div className={`p-2 rounded-lg ${isSelected ? 'bg-curator-primary text-curator-on_primary' : 'bg-curator-surface_container_highest text-curator-primary'}`}>
+                     <Utensils className="w-4 h-4" />
                   </div>
-                  {detail.dietaryType === 'vegetarian' && <Leaf className="w-3 h-3 text-curator-primary opacity-50" />}
+                  {detail.dietaryType === 'vegetarian' && <Leaf className="w-3.5 h-3.5 text-curator-primary opacity-40" />}
                 </div>
-                <div className="text-sm text-curator-on_surface_variant leading-relaxed pl-7">{detail.goal}</div>
+                <div>
+                  <div className="text-lg font-bold font-manrope text-curator-on_surface leading-tight mb-2">{detail.title}</div>
+                  <div className="text-[11px] text-curator-on_surface_variant leading-relaxed line-clamp-3 opacity-80">{detail.goal}</div>
+                </div>
               </button>
             );
           }) : (
-            <div className="p-10 text-center bg-curator-surface_container_low rounded-2xl border-2 border-dashed border-curator-outline_variant/20">
+            <div className="col-span-full p-20 text-center bg-curator-surface_container_low rounded-2xl border-2 border-dashed border-curator-outline_variant/20">
               <p className="text-curator-on_surface_variant font-manrope text-lg italic">No specialties found for this combination.</p>
             </div>
           )}

@@ -47,41 +47,72 @@ export const PREDEFINED_HIERARCHY: MainGoal[] = [
           {
             id: "maacher_jhol",
             title: "Maacher Jhol (Fish Stew)",
-            goal: "Master the iconic light fish stew of Bengal with precise spice-tempering.",
-            gap: "Mustard oil heat control & whole spice profiling",
+            goal: "Master the iconic light fish stew with precise mustard-cumin tempering.",
+            gap: "Mustard oil smoke-point control",
             dietaryType: "non-vegetarian",
             pools: {
-              Planning: [
-                { title: "Bazaar Expedition", reason: "Authenticity starts with Rohu or Katla fish.", desc: "Visit a regional fish market and ensure you have high-smoke-point mustard oil.", subgoal: "preparation", strips: { action: "SOURCE_INGREDIENTS", pre: ["nothing"], eff: ["fresh_fish_available", "mustard_oil_available"] } }
-              ],
+              Planning: [{ title: "Bazaar Expedition", reason: "Freshness is everything.", desc: "Source Rohu or Katla fish.", subgoal: "preparation", strips: { action: "SOURCE", pre: ["nothing"], eff: ["fresh_fish"] } }],
               Execution: [
-                { title: "Pan-Searing the Fish", reason: "Frying fish in turmeric/salt prevents it from breaking in the gravy.", desc: "Lightly fry fish pieces in mustard oil until golden. Do not overcook.", subgoal: "preparation", strips: { action: "SEAR_FISH", pre: ["fresh_fish_available", "mustard_oil_hot"], eff: ["seared_fish_ready"] } },
-                { title: "Mustard-Cumin Synthesis", reason: "The 'Jhol' relies on a thin, aromatic consistency.", desc: "Temper the oil with nigella seeds and green chilies. Add cumin-coriander paste.", subgoal: "cooking", strips: { action: "TEMPER_SPICES", pre: ["mustard_oil_hot"], eff: ["aromatic_base_ready"] } },
-                { title: "Potato & Fish Integration", reason: "Slow simmering allows the flavors to penetrate the core of the fish.", desc: "Add fried potato wedges and simmer with the fish until tender.", subgoal: "cooking", strips: { action: "SIMMER_STEW", pre: ["aromatic_base_ready", "seared_fish_ready"], eff: ["fish_stew_integrated"] } }
+                { title: "Pan-Searing", reason: "Prevention of disintegration.", desc: "Fry fish in turmeric and salt.", subgoal: "preparation", strips: { action: "SEAR", pre: ["fresh_fish"], eff: ["seared_fish"] } },
+                { title: "Jhol Tempering", reason: "Aromatic base foundation.", desc: "Add nigella seeds and green chilies.", subgoal: "cooking", strips: { action: "TEMPER", pre: ["mustard_oil"], eff: ["aromatic_base"] } }
               ],
-              Review: [
-                { title: "Palate Check", reason: "Bengali food balance is delicate.", desc: "Ensure the pungency of mustard oil is balanced by the sweetness of the fish.", subgoal: "finishing", strips: { action: "VERIFY_FLAVOR", pre: ["fish_stew_integrated"], eff: ["goal_achieved"] } }
-              ]
+              Review: [{ title: "Palate Audit", reason: "Lightness check.", desc: "Verify thin consistency.", subgoal: "finishing", strips: { action: "VERIFY", pre: ["jhol_done"], eff: ["goal_achieved"] } }]
+            }
+          },
+          {
+            id: "kosha_mangso",
+            title: "Kosha Mangso (Mutton Cook)",
+            goal: "Master the slow-cooked, goat curry with the 'Kosho' technique.",
+            gap: "Patience in caramelization",
+            dietaryType: "non-vegetarian",
+            pools: {
+              Planning: [{ title: "Mutton Selection", reason: "Fat-to-meat ratio.", desc: "Source tender goat shoulder pieces.", subgoal: "preparation", strips: { action: "SOURCE", pre: ["nothing"], eff: ["raw_mutton"] } }],
+              Execution: [
+                { title: "The Kosho Process", reason: "Deep caramelization.", desc: "Slow fry onion and spice paste for 60 mins.", subgoal: "cooking", strips: { action: "BHUNA", pre: ["raw_mutton"], eff: ["dark_rich_gravy"] } }
+              ],
+              Review: [{ title: "Tender Review", reason: "Fall-off-the-bone requirement.", desc: "Check if meat is butter-soft.", subgoal: "finishing", strips: { action: "CHECK", pre: ["kosho_done"], eff: ["goal_achieved"] } }]
+            }
+          },
+          {
+            id: "chingri_malaikari",
+            title: "Chingri Malaikari (Prawn Cream)",
+            goal: "Master the luxurious prawn curry cooked in thick coconut milk.",
+            gap: "Seafood timing & milk emulsion",
+            dietaryType: "non-vegetarian",
+            pools: {
+              Planning: [{ title: "Coconut Extraction", reason: "Freshness over canned.", desc: "Extract fresh milk from one coconut.", subgoal: "preparation", strips: { action: "EXTRACT", pre: ["nothing"], eff: ["fresh_coconut_milk"] } }],
+              Execution: [
+                { title: "Prawn Cleaning", reason: "The deveining protocol.", desc: "Devein golda chingri carefully.", subgoal: "preparation", strips: { action: "CLEAN", pre: ["raw_prawns"], eff: ["prepped_prawns"] } },
+                { title: "Coconut Milk Gradient", reason: "Texture layers.", desc: "Add thin milk first, thick milk at the end.", subgoal: "cooking", strips: { action: "EMULSIFY", pre: ["fresh_coconut_milk"], eff: ["silky_gravy"] } }
+              ],
+              Review: [{ title: "Sweetness Balance", reason: "Natural coconut sugar levels.", desc: "Ensure spice doesn't overpower milk.", subgoal: "finishing", strips: { action: "VERIFY", pre: ["malaikari_done"], eff: ["goal_achieved"] } }]
+            }
+          },
+          {
+            id: "aloo_posto",
+            title: "Aloo Posto (Poppy Seed Potato)",
+            goal: "Master the nutty, comforting potato specialty of rural Bengal.",
+            gap: "Poppy seed paste texture",
+            dietaryType: "vegetarian",
+            pools: {
+               Planning: [{ title: "Posto Grinding", reason: "Silkiness vs Grit.", desc: "Grind poppy seeds into a thick paste.", subgoal: "preparation", strips: { action: "GRIND", pre: ["dry_poppy"], eff: ["posto_paste"] } }],
+               Execution: [
+                 { title: "Potato Sauté", reason: "Outer skin integrity.", desc: "Fry potato cubes until edges are golden.", subgoal: "preparation", strips: { action: "FRY", pre: ["raw_potatoes"], eff: ["golden_potatoes"] } },
+                 { title: "The Posto Merge", reason: "Avoid drying out.", desc: "Mix paste with potatoes and water.", subgoal: "cooking", strips: { action: "DUM", pre: ["posto_paste"], eff: ["creamy_posto"] } }
+               ],
+               Review: [{ title: "Nutty Finish", reason: "Authenticity check.", desc: "Add raw mustard oil for pungency.", subgoal: "finishing", strips: { action: "FINISH", pre: ["creamy_posto"], eff: ["goal_achieved"] } }]
             }
           },
           {
             id: "shukto",
-            title: "Bengali Shukto (Bitter-Sweet Medley)",
-            goal: "Master the fundamental starter meal that cleanses the palate.",
-            gap: "Bitter-Sweet balance & creamy texture",
+            title: "Bengali Shukto",
+            goal: "Master the bitter-sweet tonic of Bengali vegetarian cuisine.",
+            gap: "Bitter Gourd balance",
             dietaryType: "vegetarian",
             pools: {
-              Planning: [
-                { title: "Veggie Selection", reason: "Shukto requires 7 distinct vegetables including Bitter Gourd.", desc: "Source drumsticks, raw banana, sweet potato, and bitter gourd.", subgoal: "preparation", strips: { action: "SOURCE_VEGGIES", pre: ["nothing"], eff: ["bitter_gourd_ready", "banana_ready"] } }
-              ],
-              Execution: [
-                { title: "Neutralizing the Bitter", reason: "Too much bitterness ruins the delicate milk base.", desc: "Lightly fry bitter gourd slices alone until crisp and set aside.", subgoal: "preparation", strips: { action: "FRY_BITTER_GOURD", pre: ["bitter_gourd_ready"], eff: ["crisp_gourd_ready"] } },
-                { title: "The Radhuni Tempering", reason: "Radhuni seed (Wild Celery) is the soul of authentic Shukto.", desc: "Temper the oil with Radhuni and Panch Phoron seeds.", subgoal: "cooking", strips: { action: "TEMPER_RADHUNI", pre: ["mustard_oil_hot"], eff: ["shukto_base_ready"] } },
-                { title: "Milk & Poppy Emulsion", reason: "Creates the unique whitish, creamy gravy of Shukto.", desc: "Add poppy seed paste and whole milk. Let it simmer until thick.", subgoal: "finishing", strips: { action: "EMULSIFY_MILK", pre: ["shukto_base_ready"], eff: ["silky_texture_achieved"] } }
-              ],
-              Review: [
-                { title: "Texture Balance", reason: "Vegetables must be firm, not mushy.", desc: "Check if the drumsticks are tender but the Raw Banana is still whole.", subgoal: "finishing", strips: { action: "VERIFY_TEXTURE", pre: ["silky_texture_achieved"], eff: ["goal_achieved"] } }
-              ]
+              Planning: [{ title: "Veggie Selection", reason: "7 distinct vegetables.", desc: "Source drumsticks, raw banana, gourd.", subgoal: "preparation", strips: { action: "SOURCE", pre: ["nothing"], eff: ["prepped_veggies"] } }],
+              Execution: [{ title: "The Bitter Gourd Neutral", reason: "Prevent bitterness spread.", desc: "Fry bitter gourd separately first.", subgoal: "preparation", strips: { action: "FRY", pre: ["bitter_gourd"], eff: ["neutral_gourd"] } }],
+              Review: [{ title: "Milk-Poppy Emulsion", reason: "Whitish silky texture.", desc: "Check consistency after adding milk.", subgoal: "finishing", strips: { action: "EMULSIFY", pre: ["neutral_gourd"], eff: ["goal_achieved"] } }]
             }
           }
         ]
@@ -93,40 +124,59 @@ export const PREDEFINED_HIERARCHY: MainGoal[] = [
           {
             id: "butter_chicken",
             title: "Butter Chicken (Murg Makhani)",
-            goal: "Achieve the smoky, tomato-based poultry masterpiece of the North.",
-            gap: "Tandoori char & smokey gravy emulsification",
+            goal: "Master the iconic tandoori-charred, tomato-butter chicken.",
+            gap: "Tandoori smokiness in a home kitchen",
             dietaryType: "non-vegetarian",
             pools: {
-              Planning: [
-                { title: "Chicken Brining", reason: "Brining ensures the meat stays succulent after the intense Tandoori heat.", desc: "Soak chicken pieces in salt water for 2 hours before the first marinade.", subgoal: "preparation", strips: { action: "BRINE_MEAT", pre: ["raw_chicken"], eff: ["succulent_chicken_ready"] } }
-              ],
-              Execution: [
-                { title: "Tandoori Char Logic", reason: "Smokey edges provide the counter-balance to the sweet gravy.", desc: "Grill chicken at 250°C until charred edges appear.", subgoal: "cooking", strips: { action: "GRILL_CHAR", pre: ["succulent_chicken_ready"], eff: ["charred_chicken_ready"] } },
-                { title: "Gravy Emulsification", reason: "Straining ensures the signature 'Makhani' (buttery) smoothness.", desc: "Strain the tomato-cashew puree through a fine mesh sieve.", subgoal: "cooking", strips: { action: "STRAIN_GRAVY", pre: ["tomato_puree_boiled"], eff: ["velvet_gravy_base"] } }
-              ],
-              Review: [
-                { title: "Cream-Butter Ratio", reason: "Richness is the goal, but splitting is the risk.", desc: "Gently stir in cold heavy cream and white butter off the heat.", subgoal: "finishing", strips: { action: "ADD_FATS", pre: ["velvet_gravy_base", "charred_chicken_ready"], eff: ["goal_achieved"] } }
-              ]
+              Planning: [{ title: "Spatchcock Prep", reason: "Even heat distribution.", desc: "Prepare chicken for high-heat grill.", subgoal: "preparation", strips: { action: "PREP", pre: ["raw_chicken"], eff: ["prepped_bird"] } }],
+               Execution: [
+                 { title: "Double Marinade", reason: "Inner juiciness.", desc: "Lemon first, then hung curd and chili.", subgoal: "preparation", strips: { action: "MARINATE", pre: ["prepped_bird"], eff: ["marinated_bird"] } },
+                 { title: "The Mukhani Redux", reason: "Silky tomato reduction.", desc: "Boil tomatoes with cashews and strain.", subgoal: "cooking", strips: { action: "REDUCE", pre: ["tomatoes"], eff: ["silky_makhani_base"] } }
+               ],
+               Review: [{ title: "Kasuri Methi Finish", reason: "Aromatic signature.", desc: "Rub dried fenugreek leaves on top.", subgoal: "finishing", strips: { action: "FINISH", pre: ["complete_dish"], eff: ["goal_achieved"] } }]
             }
           },
           {
-            id: "paneer_butter_masala",
-            title: "Paneer Butter Masala",
-            goal: "Master the iconic vegetarian version of the creamy tomato gravy.",
-            gap: "Softening paneer & onion-tomato balance",
+            id: "nihari",
+            title: "Old Delhi Nihari",
+            goal: "Master the slow-cooked, bone-marrow mutton stew.",
+            gap: "8-hour simmering technique",
+            dietaryType: "non-vegetarian",
+            pools: {
+              Planning: [{ title: "Shank Sourcing", reason: "Gelatinous texture.", desc: "Find mutton shanks with marrow bones.", subgoal: "preparation", strips: { action: "SOURCE", pre: ["nothing"], eff: ["mutton_shanks"] } }],
+              Execution: [
+                { title: "The Flour Thickener", reason: "Signature Nihari body.", desc: "Mix roasted wheat flour into the stew.", subgoal: "cooking", strips: { action: "THICKEN", pre: ["mutton_shanks"], eff: ["thick_stew_base"] } }
+              ],
+              Review: [{ title: "Marrow Extraction", reason: "Flavor richness.", desc: "Check if marrow is liquid-soft.", subgoal: "finishing", strips: { action: "VERIFY", pre: ["thick_stew_base"], eff: ["goal_achieved"] } }]
+            }
+          },
+          {
+            id: "dal_makhani",
+            title: "Dal Makhani (Slow Simmer)",
+            goal: "Master the classic black lentil stew cooked over 12 hours.",
+            gap: "Lentil silkiness vs graininess",
             dietaryType: "vegetarian",
             pools: {
-              Planning: [
-                { title: "Paneer Softening Protocol", reason: "Rubbery paneer ruins the luxury of the dish.", desc: "Soak paneer cubes in hot salted water for 20 minutes before using.", subgoal: "preparation", strips: { action: "SOAK_PANEER", pre: ["store_bought_paneer"], eff: ["soft_paneer_ready"] } }
-              ],
+              Planning: [{ title: "Urad Dal Soaking", reason: "Outer skin softening.", desc: "Soak black dal and rajma for 12 hours.", subgoal: "preparation", strips: { action: "SOAK", pre: ["dry_lentils"], eff: ["soaked_lentils"] } }],
               Execution: [
-                { title: "Cashew-Garlic Infusion", reason: "North Indian veg gravies rely on nuts for thickening, not just cream.", desc: "Sauté cashews and garlic before blending into the tomato base.", subgoal: "cooking", strips: { action: "INFUSE_NUTS", pre: ["raw_garlic", "cashews"], eff: ["rich_nut_base"] } },
-                { title: "Kasuri Methi Final Rub", reason: "Dried fenugreek leaves provide the 'restaurant' aroma.", desc: "Crush leaves between your palms to activate oils before sprinkling.", subgoal: "finishing", strips: { action: "ACTIVATE_METHI", pre: ["gravy_simmering"], eff: ["signature_aroma_captured"] } }
+                { title: "Low Simmer Cycle", reason: "Creamy breakdown.", desc: "Cook on the lowest flame for 4 hours.", subgoal: "cooking", strips: { action: "SIMMER", pre: ["soaked_lentils"], eff: ["broken_lentils"] } }
               ],
-              Review: [
-                { title: "Tanginess Audit", reason: "Tomatoes vary; sugar/honey balance is crucial.", desc: "Taste for acidity. Use a pinch of sugar to balance the tomato tartness.", subgoal: "finishing", strips: { action: "BALANCE_ACIDITY", pre: ["signature_aroma_captured"], eff: ["goal_achieved"] } }
-              ]
+              Review: [{ title: "The Final Buttering", reason: "Glossy finish.", desc: "Add generous white butter and cream.", subgoal: "finishing", strips: { action: "FINISH", pre: ["broken_lentils"], eff: ["goal_achieved"] } }]
             }
+          },
+          {
+             id: "malai_kofta",
+             title: "Malai Kofta (Cashew Gravy)",
+             goal: "Master the deep-fried paneer balls in a white cashew-cream sauce.",
+             gap: "Kofta structural integrity",
+             dietaryType: "vegetarian",
+             pools: {
+                Planning: [{ title: "Paneer Grating", reason: "No lumps allowed.", desc: "Grate fresh paneer and boil potatoes.", subgoal: "preparation", strips: { action: "PREP", pre: ["paneer"], eff: ["grated_mix"] } }],
+                Execution: [
+                  { title: "The Cashew Puree", reason: "The White Sauce secret.", desc: "Boil cashews and onions before blending.", subgoal: "cooking", strips: { action: "PUREE", pre: ["cashews"], eff: ["white_puree"] } }
+                ],
+                Review: [{ title: "Softness Check", reason: "Melt-in-mouth test.", desc: "Ensure koftas don't break in gravy.", subgoal: "finishing", strips: { action: "VERIFY", pre: ["white_puree"], eff: ["goal_achieved"] } }]
+             }
           }
         ]
       },
@@ -137,65 +187,42 @@ export const PREDEFINED_HIERARCHY: MainGoal[] = [
           {
             id: "masala_dosa",
             title: "Authentic Masala Dosa",
-            goal: "Master the fermentation and spreading technique of the perfect crispy crepe.",
-            gap: "Batter fermentation & spreading precision",
+            goal: "Master the art of fermented batter and crispy crepe spreading.",
+            gap: "Batter fermentation consistency",
             dietaryType: "vegetarian",
             pools: {
-              Planning: [
-                { title: "Rice-Lentil Ratio Check", reason: "3 parts rice to 1 part dal ensures the correct tensile strength.", desc: "Measure and soak parboiled rice and urad dal separately for 6 hours.", subgoal: "preparation", strips: { action: "SOAK_GRAINS", pre: ["rice", "dal"], eff: ["soaked_grains_ready"] } }
-              ],
-              Execution: [
-                { title: "The Fermentation Window", reason: "Airborne yeast creates the CO2 bubbles needed for lightness.", desc: "Grind and let the batter sit in a warm spot for exactly 12 hours.", subgoal: "preparation", strips: { action: "FERMENT_BATTER", pre: ["ground_batter"], eff: ["fermented_active_batter"] } },
-                { title: "The Tawa Spread", reason: "Consistent thinness prevents soggy centers.", desc: "Pour a ladle in the center and spiral outwards with zero pressure.", subgoal: "cooking", strips: { action: "SPREAD_DOSA", pre: ["fermented_active_batter", "hot_tawa"], eff: ["thin_crepe_formed"] } }
-              ],
-              Review: [
-                { title: "Crisp Level Audit", reason: "Should maintain structural integrity when folded.", desc: "Check if the bottom is deep golden brown and moves as one piece.", subgoal: "finishing", strips: { action: "CHECK_CRISP", pre: ["thin_crepe_formed"], eff: ["goal_achieved"] } }
-              ]
+              Planning: [{ title: "Rice-to-Dal Ratio", reason: "Crispiness physics.", desc: "3 parts rice to 1 part urad dal.", subgoal: "preparation", strips: { action: "MEASURE", pre: ["nothing"], eff: ["ingredients_ready"] } }],
+              Execution: [{ title: "The Tawa Spread", reason: "Thinness protocol.", desc: "Dosa spreading in tight concentric circles.", subgoal: "cooking", strips: { action: "SPREAD", pre: ["fermented_batter"], eff: ["thin_crepe"] } }],
+              Review: [{ title: "Crisp Analysis", reason: "Browning level.", desc: "Check for even golden color on base.", subgoal: "finishing", strips: { action: "VERIFY", pre: ["thin_crepe"], eff: ["goal_achieved"] } }]
             }
           },
           {
-            id: "south_fish_curry",
-            title: "Kerala Meen Curry (Fish Curry)",
-            goal: "Master the use of Kokum (tamarind) and coconut milk in coastal cooking.",
-            gap: "Sourness integration & seafood freshness",
+            id: "chettinad_chicken",
+            title: "Chettinad Chicken Roast",
+            goal: "Master the complex 16-spice pepper chicken of Tamil Nadu.",
+            gap: "Fresh spice roasting intensity",
             dietaryType: "non-vegetarian",
             pools: {
-              Planning: [
-                { title: "Kokum Preparation", reason: "Dried Malabar tamarind needs rehydration to release its tannins.", desc: "Soak 3 pieces of Kudampuli in warm water for 30 minutes.", subgoal: "preparation", strips: { action: "SOAK_KOKUM", pre: ["dry_kokum"], eff: ["sour_extract_ready"] } }
-              ],
+              Planning: [{ title: "Dry-Spice Selection", reason: "Star Anise & Kalpasi.", desc: "Find stone flower (Kalpasi) for aromatics.", subgoal: "preparation", strips: { action: "SOURCE", pre: ["nothing"], eff: ["chettinad_spices"] } }],
               Execution: [
-                { title: "Shallot-Ginger Slow Sear", reason: "South Indian curries use small onions for intense sweetness.", desc: "Sauté 15 shallots until translucent but not burnt.", subgoal: "cooking", strips: { action: "SAUTE_SHALLOTS", pre: ["raw_shallots"], eff: ["sweet_base_ready"] } },
-                { title: "The Coconut Milk Gradient", reason: "Thin milk cooks the fish; thick milk provides the silkiness.", desc: "Add thin coconut milk first. Simmer fish, then finish with thick extract.", subgoal: "cooking", strips: { action: "GRADIENT_ADD", pre: ["sweet_base_ready", "sour_extract_ready"], eff: ["layered_curry_texture"] } }
+                { title: "The 16-Spice Roast", reason: "Deep forest flavor.", desc: "Dry roast spices until they turn dark brown.", subgoal: "cooking", strips: { action: "ROAST", pre: ["chettinad_spices"], eff: ["roasted_masala"] } }
               ],
-              Review: [
-                { title: "Freshness Verification", reason: "Coconut oil smells change if overboiled.", desc: "Check that the raw smell of spices is replaced by a creamy aroma.", subgoal: "finishing", strips: { action: "VERIFY_AROMA", pre: ["layered_curry_texture"], eff: ["goal_achieved"] } }
-              ]
+              Review: [{ title: "Spice Punch Check", reason: "Pepper-forward finish.", desc: "Verify heat levels vs coconut sweetness.", subgoal: "finishing", strips: { action: "VERIFY", pre: ["roasted_masala"], eff: ["goal_achieved"] } }]
             }
-          }
-        ]
-      },
-      {
-        id: "gujarati",
-        label: "Gujarati Cuisine",
-        details: [
+          },
           {
-            id: "dhokla",
-            title: "Khaman Dhokla",
-            goal: "Master the aeration and tempering of sponge-like savory cakes.",
-            gap: "Soda-acid reaction & steaming time",
-            dietaryType: "vegetarian",
-            pools: {
-              Planning: [
-                { title: "Gram Flour Sifting", reason: "Lumps prevent the soda-acid reaction from being uniform.", desc: "Sieve the besan twice to introduce air before adding water.", subgoal: "preparation", strips: { action: "SIFT_FLOUR", pre: ["raw_besan"], eff: ["aerated_flour_ready"] } }
-              ],
-              Execution: [
-                { title: "The Soda Activation", reason: "Reaction must happen JUST before the lid closes.", desc: "Whisk in ENO/Soda, wait 5 seconds, and pour into the steamer.", subgoal: "cooking", strips: { action: "ACTIVATE_SODA", pre: ["aerated_flour_ready", "steam_ready"], eff: ["risen_dhokla_base"] } },
-                { title: "The Sugar-Citrus Syrup", reason: "Dhokla is a sponge; it must absorb liquid without collapsing.", desc: "Pour a warm mix of mustard seeds, green chilies, and sugar-water over.", subgoal: "finishing", strips: { action: "ABSORB_SYRUP", pre: ["risen_dhokla_base"], eff: ["moist_sponge_achieved"] } }
-              ],
-              Review: [
-                { title: "Bounce Analysis", reason: "Should spring back when pressed gently.", desc: "Verify that no liquid stays at the bottom of the container.", subgoal: "finishing", strips: { action: "VERIFY_BOUNCE", pre: ["moist_sponge_achieved"], eff: ["goal_achieved"] } }
-              ]
-            }
+             id: "avial",
+             title: "Kerala Avial (Mixed Veg)",
+             goal: "Master the coconut-yogurt seasonal veggie medley.",
+             gap: "Cured veggie texture",
+             dietaryType: "vegetarian",
+             pools: {
+                Planning: [{ title: "Seasonal Selection", reason: "Yam and Drumstick.", desc: "Source 5-7 varieties of regional veggies.", subgoal: "preparation", strips: { action: "SOURCE", pre: ["nothing"], eff: ["fresh_farm_veggies"] } }],
+                Execution: [
+                  { title: "The Coconut Coarse Grind", reason: "Textural contrast.", desc: "Grind coconut with cumin very coarsely.", subgoal: "cooking", strips: { action: "GRIND", pre: ["coconut"], eff: ["coarse_mix"] } }
+                ],
+                Review: [{ title: "Cold Coconut Oil Finish", reason: "Signature aroma.", desc: "Drizzle raw coconut oil on top.", subgoal: "finishing", strips: { action: "CRUSH", pre: ["coarse_mix"], eff: ["goal_achieved"] } }]
+             }
           }
         ]
       },
@@ -206,40 +233,44 @@ export const PREDEFINED_HIERARCHY: MainGoal[] = [
           {
             id: "laal_maas",
             title: "Laal Maas (Red Meat)",
-            goal: "Master the intense heat and smokey flavor of Rajasthan's warrior meal.",
-            gap: "Mathania chili usage & smoke infusion",
+            goal: "Master the fiery Rajasthani mutton with Mathania chilies.",
+            gap: "Heat management with Mathania chilies",
             dietaryType: "non-vegetarian",
             pools: {
-              Planning: [
-                { title: "Mathania Chili Hunt", reason: "Authentic heat comes from these specific regional chilies.", desc: "Source dried Mathania chilies. Soak them to create the deep red paste.", subgoal: "preparation", strips: { action: "SOURCE_CHILI", pre: ["nothing"], eff: ["mathania_pulp_ready"] } }
-              ],
+              Planning: [{ title: "Mathania Hunt", reason: "Color without extreme heat.", desc: "Source dried Mathania red chilies.", subgoal: "preparation", strips: { action: "SOURCE", pre: ["nothing"], eff: ["mathania_chilies"] } }],
               Execution: [
-                { title: "Slow Braise: Ghee Only", reason: "Traditional Rajasthan cooking uses Ghee as the primary thermal conductor.", desc: "Sauté the meat in 1/2 cup of pure Ghee until the edges are crispy.", subgoal: "cooking", strips: { action: "BRAISE_GHEE", pre: ["raw_meat", "mathania_pulp_ready"], eff: ["seared_spicy_meat"] } },
-                { title: "The Dhunger (Coal Smoke)", reason: "Adds the desert camp-fire smokey essence to the spices.", desc: "Place burning charcoal in a bowl inside. Pour Ghee and cover.", subgoal: "finishing", strips: { action: "INFUSE_SMOKE", pre: ["seared_spicy_meat"], eff: ["smoked_red_mutton"] } }
+                { title: "The Dhunger Smoke", reason: "Desert campfire aroma.", desc: "Place burning charcoal in the pot.", subgoal: "finishing", strips: { action: "SMOKE", pre: ["cooked_mutton"], eff: ["smoked_laal_maas"] } }
               ],
-              Review: [
-                { title: "Oil Separation Check", reason: "Red oil must float on top (The Rogan).", desc: "Check for the deep crimson layer separating from the spices.", subgoal: "finishing", strips: { action: "CHECK_ROGAN", pre: ["smoked_red_mutton"], eff: ["goal_achieved"] } }
-              ]
+              Review: [{ title: "Crimson Oil Audit", reason: "The Rogan check.", desc: "Verify red oil float on surface.", subgoal: "finishing", strips: { action: "VERIFY", pre: ["smoked_laal_maas"], eff: ["goal_achieved"] } }]
             }
           },
           {
-            id: "dal_baati",
-            title: "Dal Baati Churma",
-            goal: "Execute the triplet of hard wheat balls, lentils, and sweet crumble.",
-            gap: "Uniform baking and Ghee absorption",
-            dietaryType: "vegetarian",
-            pools: {
-              Planning: [
-                { title: "Whole Wheat Texture", reason: "Should be coarse (Suji-like) for the correct crunch.", desc: "Source coarse wheat flour and pure cow ghee.", subgoal: "preparation", strips: { action: "SOURCE_TEXTURE", pre: ["nothing"], eff: ["coarse_flour_ready"] } }
-              ],
-              Execution: [
-                { title: "The Baati Bake", reason: "Hard dough ensures the centers don't get soggy.", desc: "Bake dough balls on low heat in a Tandoor or gas oven.", subgoal: "cooking", strips: { action: "BAKE_BAATI", pre: ["coarse_flour_ready"], eff: ["hard_baked_balls"] } },
-                { title: "The Ghee Soak", reason: "Baatis are dipped in warm Ghee to soften the crust.", desc: "Crack the hot baati and submerge it in a bowl of warm Ghee for 2 mins.", subgoal: "finishing", strips: { action: "SOAK_GHEE", pre: ["hard_baked_balls"], eff: ["soft_crunchy_result"] } }
-              ],
-              Review: [
-                { title: "Dal Punchiness", reason: "The lentils must be garlicky to cut through the heavy ghee.", desc: "Check if the Panch Mel Dal has a strong garlic-dry chili tempering.", subgoal: "finishing", strips: { action: "VERIFY_DAL", pre: ["soft_crunchy_result"], eff: ["goal_achieved"] } }
-              ]
-            }
+             id: "safed_maas",
+             title: "Safed Maas (White Meat)",
+             goal: "Master the royal white mutton curry cooked in milk and yogurt.",
+             gap: "Anti-curdling yogurt logic",
+             dietaryType: "non-vegetarian",
+             pools: {
+                Planning: [{ title: "White Spice Selection", reason: "No red allowed.", desc: "Find poppy seeds, cashews, melon seeds.", subgoal: "preparation", strips: { action: "SOURCE", pre: ["nothing"], eff: ["white_masala"] } }],
+                Execution: [
+                  { title: "The Cold Whisk", reason: "Yogurt stabilization.", desc: "Whisk yogurt and flour slowly into sauce.", subgoal: "cooking", strips: { action: "WHISK", pre: ["white_masala"], eff: ["white_velvet_gravy"] } }
+                ],
+                Review: [{ title: "Silver Finish", reason: "Royal presentation.", desc: "Check for the pristine white consistency.", subgoal: "finishing", strips: { action: "VERIFY", pre: ["white_velvet_gravy"], eff: ["goal_achieved"] } }]
+             }
+          },
+          {
+             id: "dal_baati",
+             title: "Dal Baati Churma",
+             goal: "Master the triplet of hard baked balls, lentils and sugar crumble.",
+             gap: "Dough density vs baking time",
+             dietaryType: "vegetarian",
+             pools: {
+                Planning: [{ title: "Coarse Wheat Hunt", reason: "Texture crunch.", desc: "Find coarsely ground wheat flour.", subgoal: "preparation", strips: { action: "SOURCE", pre: ["nothing"], eff: ["coarse_wheat"] } }],
+                Execution: [
+                  { title: "The Ghee Drown", reason: "Soaking protocol.", desc: "Crack hot baatis and submerge in warm ghee.", subgoal: "finishing", strips: { action: "SOAK", pre: ["baked_baati"], eff: ["softened_baati"] } }
+                ],
+                Review: [ { title: "Churma Synthesis", reason: "Sweet balance.", desc: "Crush extra baatis with jaggery.", subgoal: "finishing", strips: { action: "CRUSH", pre: ["softened_baati"], eff: ["goal_achieved"] } }]
+             }
           }
         ]
       },
@@ -250,40 +281,42 @@ export const PREDEFINED_HIERARCHY: MainGoal[] = [
           {
             id: "rogan_josh",
             title: "Authentic Rogan Josh",
-            goal: "Execute the royal lamb dish using traditional Kashmiri Pandit styles.",
-            gap: "Ratan Jot infusion & yogurt tempering",
+            goal: "Master the royal lamb dish with Ratan Jot and Fennel.",
+            gap: "Natural red coloring infusion",
             dietaryType: "non-vegetarian",
             pools: {
-              Planning: [
-                { title: "Ratan Jot Sourcing", reason: "Authentic red color comes from alkanet root, not just chili.", desc: "Find authentic Ratan Jot root (Alkanet root) for the color infusion.", subgoal: "preparation", strips: { action: "SOURCE_COLOR", pre: ["nothing"], eff: ["alkanet_root_ready"] } }
-              ],
-              Execution: [
-                { title: "Fennel-Ginger Base", reason: "Kashmiri cooking avoids onion/garlic, relying on spice powders.", desc: "Sauté meat with heavy amounts of Saunth (ginger) and Saunf (fennel).", subgoal: "cooking", strips: { action: "SAUTE_POWDERS", pre: ["raw_meat"], eff: ["aromatic_meat_base"] } },
-                { title: "Alkanet Infusion", reason: "Heat root in oil, then discard root. Add the red oil to the pot.", desc: "Heat Ratan Jot in 2 tbsp oil till red, then pour into the gravy.", subgoal: "finishing", strips: { action: "INFUSE_COLOR", pre: ["aromatic_meat_base", "alkanet_root_ready"], eff: ["crimson_lamb_gravy"] } }
-              ],
-              Review: [
-                { title: "Yogurt Texture Audit", reason: "Should be velvety and smooth, no curdling.", desc: "Verify the yogurt has merged completely with the red oils.", subgoal: "finishing", strips: { action: "CHECK_VELVET", pre: ["crimson_lamb_gravy"], eff: ["goal_achieved"] } }
-              ]
+              Planning: [{ title: "Ratan Jot Sourcing", reason: "Chemical-free red.", desc: "Find Alkanet root for color.", subgoal: "preparation", strips: { action: "SOURCE", pre: ["nothing"], eff: ["alkanet_root"] } }],
+              Execution: [{ title: "The Yogurt Temper", reason: "Velvety meat base.", desc: "Slowly add cold yogurt to meat spices.", subgoal: "cooking", strips: { action: "TEMPER", pre: ["raw_meat"], eff: ["yogurt_infusion"] } }],
+              Review: [{ title: "Internal Infusion", reason: "Deep spice reach.", desc: "Check if spice reached meat center.", subgoal: "finishing", strips: { action: "VERIFY", pre: ["yogurt_infusion"], eff: ["goal_achieved"] } }]
             }
           },
           {
-            id: "dum_aloo",
-            title: "Kashmiri Dum Aloo",
-            goal: "Master the deep-frying and slow-cooking of baby potatoes in spicy yogurt.",
-            gap: "Potato texture & yogurt stabilization",
-            dietaryType: "vegetarian",
+            id: "yakhni",
+            title: "Kashmiri Yakhni (Meat)",
+            goal: "Master the yogurt-based lamb curry with cardamom and cloves.",
+            gap: "Splitting prevention",
+            dietaryType: "non-vegetarian",
             pools: {
-              Planning: [
-                { title: "Starchy Potato Selection", reason: "Old potatoes are better for deep frying and pricking.", desc: "Source baby potatoes. Boil until 70% done, then prick with a toothpick.", subgoal: "preparation", strips: { action: "PREP_POTATO", pre: ["raw_potatoes"], eff: ["pricked_potatoes_ready"] } }
-              ],
+              Planning: [{ title: "Saffron Selection", reason: "Aromatic gold.", desc: "Source Grade A Kashmiri Saffron.", subgoal: "preparation", strips: { action: "SOURCE", pre: ["nothing"], eff: ["saffron_ready"] } }],
               Execution: [
-                { title: "Cold Whisk Emulsion", reason: "Yogurt must be cold when whisked with fennel-ginger to stay stable.", desc: "Whisk cold yogurt with spices. Add to potatoes on VERY low heat.", subgoal: "cooking", strips: { action: "WHISK_YOGURT", pre: ["pricked_potatoes_ready"], eff: ["spicy_yogurt_mix"] } },
-                { title: "The Dum (Pressure)", reason: "Slow heat forces the spicy liquid into the pricked holes.", desc: "Seal the pot with dough or a heavy lid and cook for 45 minutes.", subgoal: "finishing", strips: { action: "DUM_COOK", pre: ["spicy_yogurt_mix"], eff: ["infused_potatoes"] } }
+                { title: "Continuous Whisking", reason: "Prevent curdling.", desc: "Whisk yogurt in one direction for 20 mins.", subgoal: "cooking", strips: { action: "WHISK", pre: ["saffron_ready"], eff: ["yakhni_base"] } }
               ],
-              Review: [
-                { title: "Internal Texture Check", reason: " картофель should be red inside.", desc: "Cut one potato to see if the red spice has reached the center.", subgoal: "finishing", strips: { action: "VERIFY_INFUSION", pre: ["infused_potatoes"], eff: ["goal_achieved"] } }
-              ]
+              Review: [{ title: "Mutton Softness", reason: "Tenderness check.", desc: "Should pull apart with two fingers.", subgoal: "finishing", strips: { action: "VERIFY", pre: ["yakhni_base"], eff: ["goal_achieved"] } }]
             }
+          },
+          {
+             id: "paneer_chaman",
+             title: "Kashmiri Paneer Chaman",
+             goal: "Master yellow paneer cooked in fennel and dry ginger.",
+             gap: "Paneer texture & yellow infusion",
+             dietaryType: "vegetarian",
+             pools: {
+                Planning: [{ title: "Dry Ginger Hunt", reason: "The 'Saunth' requirement.", desc: "Find authentic Kashmiri sun-dried ginger.", subgoal: "preparation", strips: { action: "SOURCE", pre: ["nothing"], eff: ["saunth_powder"] } }],
+                Execution: [
+                  { title: "The Turmeric Bath", reason: "Signature yellow color.", desc: "Fry paneer with 1 tsp turmeric.", subgoal: "preparation", strips: { action: "FRY", pre: ["paneer"], eff: ["yellow_paneer"] } }
+                ],
+                Review: [{ title: "Soupiness Check", reason: "Consistency audit.", desc: "Verify thin but aromatic gravy.", subgoal: "finishing", strips: { action: "VERIFY", pre: ["yellow_paneer"], eff: ["goal_achieved"] } }]
+             }
           }
         ]
       }
@@ -295,24 +328,60 @@ export const PREDEFINED_HIERARCHY: MainGoal[] = [
     subCategories: [
       {
         id: "frontend",
-        label: "Frontend Systems",
+        label: "Modern Frontend",
         details: [
           {
-            id: "react_mvp",
-            title: "React/Next.js Architecture",
-            goal: "Master modern build patterns and state-aware components.",
-            gap: "Code cleaniness vs Prototype speed",
-            dietaryType: "vegetarian", // Default/Agnostic
+            id: "next_app_router",
+            title: "Next.js 14 App Architecture",
+            goal: "Master Server Components and streaming patterns.",
+            gap: "Client-Server boundary confusion",
+            dietaryType: "vegetarian",
             pools: {
-              Planning: [
-                { title: "Component Scoping", reason: "Prevent refactors.", desc: "List all UI atoms and molecules.", subgoal: "preparation", strips: { action: "SCOPE", pre: ["idea"], eff: ["blueprint"] } }
-              ],
-              Execution: [
-                { title: "Logical Hook Synthesis", reason: "Separation of concerns.", desc: "Write custom hooks for data fetching.", subgoal: "cooking", strips: { action: "CODE", pre: ["blueprint"], eff: ["features"] } }
-              ],
-              Review: [
-                { title: "Speed Audit", reason: "Production readiness.", desc: "Run Lighthouse check.", subgoal: "finishing", strips: { action: "AUDIT", pre: ["features"], eff: ["deployment"] } }
-              ]
+              Planning: [{ title: "Boundary Mapping", reason: "Maximize RSC usage.", desc: "Define Client vs Server components.", subgoal: "preparation", strips: { action: "MAP", pre: ["idea"], eff: ["boundary_file"] } }],
+              Execution: [{ title: "Streaming Strategy", reason: "Instant perceived speed.", desc: "Implement Suspense boundaries.", subgoal: "cooking", strips: { action: "CODE", pre: ["boundary_file"], eff: ["streaming_app"] } }],
+              Review: [{ title: "Hydration Audit", reason: "Performance check.", desc: "Check for hydration mismatches.", subgoal: "finishing", strips: { action: "AUDIT", pre: ["streaming_app"], eff: ["goal_achieved"] } }]
+            }
+          },
+          {
+            id: "svelte_reactivity",
+            title: "SvelteKit 2 Reactive Mastery",
+            goal: "Build truly compiler-optimized reactive apps.",
+            gap: "State management verbosity",
+            dietaryType: "vegetarian",
+            pools: {
+               Planning: [{ title: "Store Architecture", reason: "Global vs Local state.", desc: "Define writable and derived stores.", subgoal: "preparation", strips: { action: "SCOPE", pre: ["nothing"], eff: ["state_diagram"] } }],
+               Execution: [{ title: "Action Synthesis", reason: "Form mastery.", desc: "Build Svelte Actions for form handling.", subgoal: "cooking", strips: { action: "CODE", pre: ["state_diagram"], eff: ["reactive_app"] } }],
+               Review: [{ title: "Bundle Analysis", reason: "Compiler efficiency.", desc: "Verify zero-runtime overhead.", subgoal: "finishing", strips: { action: "AUDIT", pre: ["reactive_app"], eff: ["goal_achieved"] } }]
+            }
+          }
+        ]
+      },
+      {
+        id: "backend",
+        label: "Systems Engineering",
+        details: [
+          {
+             id: "go_microservices",
+             title: "Go (Golang) Microservices",
+             goal: "Master concurrent, type-safe backend systems.",
+             gap: "Concurrency race conditions",
+             dietaryType: "vegetarian",
+             pools: {
+                Planning: [{ title: "Proto Mapping", reason: "gRPC contract drift.", desc: "Define .proto files for services.", subgoal: "preparation", strips: { action: "DEFINE", pre: ["nothing"], eff: ["proto_files"] } }],
+                Execution: [{ title: "Worker Pool Synth", reason: "Efficient resource usage.", desc: "Build Go channel-based worker pools.", subgoal: "cooking", strips: { action: "CODE", pre: ["proto_files"], eff: ["scaling_service"] } }],
+                Review: [{ title: "Race Discovery", reason: "Stability check.", desc: "Run go test -race on all services.", subgoal: "finishing", strips: { action: "AUDIT", pre: ["scaling_service"], eff: ["goal_achieved"] } }]
+             }
+          },
+          {
+            id: "fastapi_mastery",
+            title: "High-Perf FastAPI (Python)",
+            goal: "Master asynchronous Python backend design.",
+            gap: "Blocking vs Async calls",
+            dietaryType: "vegetarian",
+            pools: {
+               Planning: [{ title: "Pydantic Modeling", reason: "Type safety first.", desc: "Define robust Pydantic schemas.", subgoal: "preparation", strips: { action: "MODEL", pre: ["nothing"], eff: ["schemas"] } }],
+               Execution: [{ title: "Async Entrail Synth", reason: "Concurrency mastery.", desc: "Implement async DB drivers (Motor/SQLAlchemy).", subgoal: "cooking", strips: { action: "CODE", pre: ["schemas"], eff: ["async_api"] } }],
+               Review: [{ title: "Dependency Audit", reason: "Security first.", desc: "Check for security vulnerabilities.", subgoal: "finishing", strips: { action: "AUDIT", pre: ["async_api"], eff: ["goal_achieved"] } }]
             }
           }
         ]

@@ -347,7 +347,94 @@ export function generateFitnessPlan(data: { goal: string; durationWeeks: number;
 // ============================================
 // CUSTOM PLANNER LOGIC
 // ============================================
-export function generateCustomPlan(data: { goalDesc: string; durationDays: number }): GeneratedPlan {
+// ============================================
+// CUSTOM PLANNER LOGIC
+// ============================================
+
+export const PREDEFINED_CUSTOM_GOALS = {
+  bengali_cooking: {
+    title: "Bengali Culinary Masterclass",
+    goal: "Master the art of authentic Bengali spice-blending and regional fish preparations.",
+    gap: "Spice profiling & temperature control mastery",
+    pools: {
+      Planning: [
+        { title: "Bazaar Expedition: Spice Sourcing", reason: "Authenticity starts with the quality of Panch Phoron and mustard oils.", desc: "Visit a regional market and source whole cumin, fennel, fenugreek, mustard, and nigella seeds." },
+        { title: "Utensil Calibration", reason: "Bengali 'Kora' cooking requires specific thermal conductivity.", desc: "Set up your heavy-bottomed iron or aluminum kora and ensure you have high-smoke-point mustard oil." }
+      ],
+      Execution: [
+        { title: "Maacher Jhol Protocol", reason: "The foundation of Bengali cuisine is light, flavorful fish stew.", desc: "Prepare a Rohu or Katla fish stew with potato wedges and a light cumin-coriander base." },
+        { title: "Maacher Matha Diye Dal", reason: "Resourceful cooking using fish heads for complex flavoring.", desc: "Slow-cook moong dal with fried fish heads and a hint of ghee-tempered spices." },
+        { title: "Kosha Mangso: The Slow Searing", reason: "Intense caramelization of onions creates a deep, dark gravy without burning.", desc: "Execute a 2-hour slow braise of mutton or chicken using the 'Kosha' technique (sautéing till oil separates)." },
+        { title: "Mishti Doi & Sandesh Intro", reason: "Fermentation and milk reduction are the two pillars of Bengali desserts.", desc: "Practice reducing full-fat milk for kheer or setting a small batch of sweetened curd." }
+      ],
+      Review: [
+        { title: "The Bitter-to-Sweet Sequence", reason: "A formal Bengali meal follows a strict palate-cleansing order.", desc: "Organize a meal starting with 'Shukto' (bitter) and ending with sweets. Evaluate the balance." }
+      ]
+    }
+  },
+  app_dev: {
+    title: "Full-Stack Web MVP",
+    goal: "Architect and deploy a functional Next.js application with state management.",
+    gap: "Static UI vs Functional Dynamic Integration",
+    pools: {
+      Planning: [
+        { title: "Data Architecture Mapping", reason: "A flawed schema leads to complex refactoring later.", desc: "Draw a diagram of your database relations and API endpoint sequences." },
+        { title: "Component Atomic Design", reason: "Consistency is easier when components are built from atoms to molecules.", desc: "List all shared UI components (Buttons, Inputs, Modals) before coding." }
+      ],
+      Execution: [
+        { title: "State Management Implementation", reason: "Centralized state prevents prop-drilling and sync issues.", desc: "Set up Context API or Zustand to handle user authentication and global data." },
+        { title: "API Route Hardening", reason: "Insecure endpoints are a critical project failure.", desc: "Implement input validation and error handling blocks for all server-side logic." },
+        { title: "Responsive Layout Synthesis", reason: "Modern apps must be 'mobile-first' by design.", desc: "Refactor your main dashboard to use fluid grids and breakpoints." }
+      ],
+      Review: [
+        { title: "Lighthouse Performance Audit", reason: "Speed and SEO are the true measures of production readiness.", desc: "Run a full audit and optimize your image sizes and font-loading strategies." }
+      ]
+    }
+  },
+  photography: {
+    title: "Digital Storytelling & Mastery",
+    goal: "Achieve instinctive control over the exposure triangle and composition.",
+    gap: "Mechanical operation vs Artistic intent",
+    pools: {
+      Planning: [
+        { title: "Vision Board & Style Study", reason: "To break the rules, you must first understand the masters.", desc: "Analyze 10 photos from National Geographic and identify their lighting sources and focal lengths." }
+      ],
+      Execution: [
+        { title: "Manual Exposure Drill", reason: "Muscle memory is required for fleeting moments.", desc: "Take 50 photos in 'Manual' mode. Adjust shutter speed to freeze and blur motion alternately." },
+        { title: "Golden Hour Composition", reason: "Natural light quality dictates the mood of the narrative.", desc: "Shoot 3 landscapes using the 'Rule of Thirds' and 'Leading Lines' during the final hour of sunlight." },
+        { title: "Post-Processing Logic", reason: "Editing is the final half of the creative process.", desc: "Import your RAW files and practice color grading to achieve a specific atmospheric mood." }
+      ],
+      Review: [
+        { title: "Portfolio Critique", reason: "Objectivity is the only path to growth.", desc: "Review your top 5 shots and identify one technical flaw in each that you will fix next time." }
+      ]
+    }
+  },
+  marathon: {
+    title: "Marathon Foundation Prep",
+    goal: "Perform base aerobic building and establish injury-prevention protocols.",
+    gap: "Low volume capacity vs 26.2 mile demand",
+    pools: {
+      Planning: [
+        { title: "Gear & Terrain Audit", reason: "Incorrect footwear is the #1 cause of pre-race injury.", desc: "Check your shoe mileage and map out 3 safe running routes with varying elevations." }
+      ],
+      Execution: [
+        { title: "Zone 2 Heart Rate Base Run", reason: "Building mitochondrial density requires low-intensity consistency.", desc: "Run for 45 minutes keeping your heart rate below 75% of its maximum." },
+        { title: "Strength & Mobility Protocol", reason: "Strength is the armor of the long-distance runner.", desc: "Complete 3 sets of single-leg glute bridges, lunges, and calf raises." },
+        { title: "Long Run: Progressive Volume", reason: "Skeletal adaptation takes longer than cardiovascular improvement.", desc: "Extend your weekend run by 10% in duration each week. Focus on steady pacing." }
+      ],
+      Review: [
+        { title: "Recovery & Nutrition Log", reason: "You only improve by what you can recover from.", desc: "Log your sleep and hydration for a week. Identify if caffeine or late meals are affecting rest." }
+      ]
+    }
+  }
+};
+
+export type CustomGoalId = keyof typeof PREDEFINED_CUSTOM_GOALS;
+
+export function generateCustomPlan(data: { goalId: string; durationDays: number }): GeneratedPlan {
+  const goalId = (data.goalId as CustomGoalId) || 'bengali_cooking';
+  const goalData = PREDEFINED_CUSTOM_GOALS[goalId] || PREDEFINED_CUSTOM_GOALS.bengali_cooking;
+
   const totalDays = Math.max(3, data.durationDays || 7);
   const planPhaseDays = Math.max(1, Math.floor(totalDays * 0.2));
   const reviewPhaseDays = Math.max(1, Math.floor(totalDays * 0.1));
@@ -358,60 +445,64 @@ export function generateCustomPlan(data: { goalDesc: string; durationDays: numbe
 
   for (let i = 0; i < totalDays; i++) {
     const dateString = currentDate.toISOString().split('T')[0];
-    let phase: PlanPhase | string = "Planning";
-    let focusSubject = "Research & Structuring";
+    let phase: string = "Planning";
     let tasks: Task[] = [];
 
     if (i < planPhaseDays) {
       phase = "Planning";
-      const planPool = [
-        { title: "Architecture & Scoping", reason: "Visualizing the end-state prevents structural errors.", desc: "Draw a diagram of the final result and list all required components/resources." },
-        { title: "Dependency Mapping", reason: "Identifying bottlenecks early allows for proactive solving.", desc: "Determine which tasks must be completed before others can begin." }
-      ];
-      const pIdx = i % planPool.length;
+      const pool = goalData.pools.Planning;
+      const tIdx = i % pool.length;
       tasks = [
         {
           id: `cust-plan-${genId()}`,
-          actionTitle: planPool[pIdx].title,
-          reason: planPool[pIdx].reason,
-          simpleExplanation: planPool[pIdx].desc,
+          actionTitle: pool[tIdx].title,
+          reason: pool[tIdx].reason,
+          simpleExplanation: pool[tIdx].desc,
           completed: false,
-          strips: { action: "SCOPE_PROJECT", pre: ["goal_unstructured"], eff: ["pathway_clear", "resources_ready"] }
+          strips: { action: "SCOPE_PROJECT", pre: ["goal_unstructured"], eff: ["pathway_clear"] }
         }
       ];
     } else if (i < planPhaseDays + execPhaseDays) {
       phase = "Execution";
+      const pool = goalData.pools.Execution;
       const dayInExec = i - planPhaseDays;
-      const execPool = [
-        { title: "Deep Work Sprint: Foundation", reason: "Starting with the core ensures the project is viable.", desc: "Focus entirely on building the 'Minimum Viable Product' version of your goal." },
-        { title: "High-Volume Execution", reason: "Quantity often leads to quality through iteration.", desc: "Execute as many sub-tasks as possible. Do not stop to polish yet." },
-        { title: "Integration Phase", reason: "Individual components must be unified to function.", desc: "Connect the different parts of your project together and test for basic flow." },
-        { title: "Constraint Optimization", reason: "Real projects always face resource or time limits.", desc: "Refine the most difficult part of the project that you've been avoiding." }
-      ];
-      const eIdx = dayInExec % execPool.length;
+      const tIdx = dayInExec % pool.length;
+      
+      // On longer durations, add a secondary task for variety
+      const showSecondary = totalDays > 14 && dayInExec % 2 === 0;
+      
       tasks = [
         {
           id: `cust-exec-${genId()}`,
-          actionTitle: execPool[eIdx].title,
-          reason: execPool[eIdx].reason,
-          simpleExplanation: execPool[eIdx].desc,
+          actionTitle: pool[tIdx].title,
+          reason: pool[tIdx].reason,
+          simpleExplanation: pool[tIdx].desc,
           completed: false,
           strips: { action: "EXECUTE_TASKS", pre: ["pathway_clear"], eff: ["milestones_completed"] }
         }
       ];
+
+      if (showSecondary) {
+        const sIdx = (tIdx + 1) % pool.length;
+        tasks.push({
+          id: `cust-exec-extra-${genId()}`,
+          actionTitle: `Refinement: ${pool[sIdx].title}`,
+          reason: "Iterative execution leads to higher quality output.",
+          simpleExplanation: `Begin a preliminary exploration into ${pool[sIdx].title.toLowerCase()} to build familiarity.`,
+          completed: false,
+          strips: { action: "ITERATE", pre: ["milestones_notched"], eff: ["advanced_skill_notched"] }
+        });
+      }
     } else {
       phase = "Review";
-      const revPool = [
-        { title: "Quality Assurance & Stress Test", reason: "Unidentified bugs lead to failure at launch.", desc: "Try to 'break' what you've built. Fix any weak points found." },
-        { title: "Final Polish & Documentation", reason: "Presentation and clarity define professional output.", desc: "Clean up the aesthetics and write a brief summary of how the project works." }
-      ];
-      const rIdx = (i - planPhaseDays - execPhaseDays) % revPool.length;
+      const pool = goalData.pools.Review;
+      const rIdx = (i - planPhaseDays - execPhaseDays) % pool.length;
       tasks = [
         {
           id: `cust-rev-${genId()}`,
-          actionTitle: revPool[rIdx].title,
-          reason: revPool[rIdx].reason,
-          simpleExplanation: revPool[rIdx].desc,
+          actionTitle: pool[rIdx].title,
+          reason: pool[rIdx].reason,
+          simpleExplanation: pool[rIdx].desc,
           completed: false,
           strips: { action: "QUALITY_ASSURANCE", pre: ["milestones_completed"], eff: ["goal_achieved"] }
         }
@@ -422,7 +513,7 @@ export function generateCustomPlan(data: { goalDesc: string; durationDays: numbe
       dayIndex: i + 1,
       date: dateString,
       phase,
-      focusSubject,
+      focusSubject: goalData.title,
       tasks
     });
 
@@ -433,9 +524,9 @@ export function generateCustomPlan(data: { goalDesc: string; durationDays: numbe
     id: `plan_${genId()}`,
     createdAt: new Date().toISOString(),
     domain: 'custom',
-    title: `Project: ${data.goalDesc}`,
-    goal: "Project successfully completed",
-    gap: "Idea phase vs Completed Reality",
+    title: goalData.title,
+    goal: goalData.goal,
+    gap: goalData.gap,
     type: "daily",
     days
   };

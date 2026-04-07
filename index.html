@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlanWise AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <main id="app"></main>
+
+    <!-- Emergency Actions Fixed -->
+    <div id="emergency-actions" class="emergency-bar">
+        <a href="tel:911" class="emergency-btn">
+            <i class="ph-fill ph-phone-call"></i> Ambulance
+        </a>
+        <a href="tel:911" class="emergency-btn police-btn">
+            <i class="ph-fill ph-shield-warning"></i> Police
+        </a>
+        <a href="tel:911" class="emergency-btn fire-btn">
+            <i class="ph-fill ph-fire"></i> Fire Dept
+        </a>
+    </div>
+
+    <!-- Templates -->
+    <template id="view-landing">
+        <section class="landing-view animate-fade-in-up">
+            <div class="landing-content">
+                <h1 class="landing-title">Structured planning <br> for real life.</h1>
+                <p class="landing-subtitle">Intelligent guidance for emergencies, studies, fitness, and goals.</p>
+                <button id="start-btn" class="btn-primary">
+                    Select Situation
+                    <i class="ph-bold ph-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+    </template>
+
+    <template id="view-domains">
+        <section class="domains-view animate-fade-in-up">
+            <div class="header-minimal">
+                <h2>What do you need a plan for?</h2>
+            </div>
+            <div class="domain-grid" id="domain-grid">
+                <!-- Cards injected here -->
+            </div>
+        </section>
+    </template>
+
+    <!-- Wizard View -->
+    <template id="view-wizard">
+        <section class="wizard-view animate-fade-in">
+            <div class="wizard-container">
+                <button class="btn-back" id="wizard-btn-back"><i class="ph-bold ph-arrow-left"></i> Change Domain</button>
+                <div class="wizard-progress">
+                    <span id="wizard-step-label" class="label-muted">Step 1 of X</span>
+                    <div class="progress-bar-container"><div id="wizard-progress-fill" class="progress-bar-fill"></div></div>
+                </div>
+                
+                <div class="wizard-question-box" id="wizard-question-box">
+                    <!-- Dynamic Question UI injected here -->
+                </div>
+                
+                <div class="wizard-actions">
+                    <button class="btn-primary btn-large hidden" id="wizard-next-btn">Next Option <i class="ph-bold ph-arrow-right"></i></button>
+                    <button class="btn-primary btn-large hidden btn-generate" id="wizard-generate-btn">Generate Plan <i class="ph-bold ph-magic-wand"></i></button>
+                </div>
+            </div>
+        </section>
+    </template>
+
+    <!-- Plan Output View -->
+    <template id="view-plan">
+        <section class="plan-view animate-fade-in">
+            <div class="plan-left">
+                <button class="btn-back" id="btn-back-home"><i class="ph-bold ph-house"></i> Home</button>
+                
+                <div class="context-sticky">
+                    <div class="plan-header-info">
+                        <p class="label-muted" id="plan-domain-label">Study Planner</p>
+                        <h2 class="current-situation-title" id="plan-title">Computing Basics Exam</h2>
+                    </div>
+                    
+                    <div class="goal-box">
+                        <p class="label-muted">Desired Goal State</p>
+                        <h3 class="goal-text" id="goal-text">Exam Readiness / Coverage 100%</h3>
+                        
+                        <div class="mea-gap-section mt-4">
+                            <p class="label-muted">Current State Gap</p>
+                            <span class="gap-badge" id="gap-badge">Syllabus Uncovered</span>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Navigation for Daily Plans -->
+                    <div id="timeline-nav-container" class="timeline-nav-container">
+                        <p class="label-muted">Plan Timeline</p>
+                        <div class="timeline-scroll" id="timeline-scroll">
+                            <!-- Day buttons injected here -->
+                        </div>
+                    </div>
+
+                    <!-- Sequence / Progress Navigation for Crisis/Sequential Plans -->
+                    <div id="sequence-nav-container" class="sequence-nav-container" style="display:none;">
+                        <p class="label-muted">Current Step</p>
+                        <div class="progress-text" id="sequence-text">Step 1 of 5</div>
+                        <div class="progress-bar-container mt-2">
+                            <div class="progress-bar-fill" id="sequence-fill"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="plan-right">
+                <div class="day-overview-header" id="day-overview-header" style="display:none;">
+                    <h2 class="day-title" id="day-title-text">Day 1 Overview</h2>
+                </div>
+
+                <div class="step-wrapper" id="plan-steps-container">
+                    <!-- Active steps injected here -->
+                </div>
+                
+                <div class="sequence-actions" id="sequence-actions" style="display:none; margin-top:40px;">
+                    <button id="next-sequence-btn" class="btn-primary btn-large">Next Step <i class="ph-bold ph-arrow-right"></i></button>
+                    <div id="sequence-completed" class="completion-state hidden">
+                        <i class="ph-fill ph-check-circle completion-icon"></i>
+                        <span>Guidance Complete.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </template>
+
+    <script src="app.js"></script>
+</body>
+</html>
